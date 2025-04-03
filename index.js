@@ -1,17 +1,18 @@
 import express from 'express'
 import mysql from 'mysql'
 import cors from 'cors'
-
+import dotenv from 'dotenv'
+dotenv.config()
 const app = express();
 
 app.use(cors());
 app.use(express.json());
 
 const db = mysql.createConnection({
-    host:"localhost",
-    user:"root",
-    password:"",
-    database:"crud"
+    host:process.env.DB_HOST,
+    user:process.env.DB_USER,
+    password:process.env.DB_PASSWORD,
+    database:process.env.DB_NAME
 })
 
 app.get('/',(req,res)=>{
@@ -21,6 +22,19 @@ app.get('/',(req,res)=>{
             return res.json(result)
     })
 })
+
+app.post('/student',async(req,res)=>{
+    const sql = "INSERT INTO students (`Name`,`Email`) VALUES (?)";
+    const values = [
+        req.body.name,
+        req.body.email
+    ]
+    db.query(sql,[values],(err,result)=>{
+        if(err) return res.json(err)
+        return res.json(result)
+    })
+})
+
 
 
 // app.get("/",async(req,res)=>{

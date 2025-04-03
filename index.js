@@ -5,7 +5,9 @@ import dotenv from 'dotenv'
 dotenv.config()
 const app = express();
 
-app.use(cors());
+app.use(cors({
+    origin:["https://zippy-souffle-f9d154.netlify.app"]
+}));
 app.use(express.json());
 
 const db = mysql.createConnection({
